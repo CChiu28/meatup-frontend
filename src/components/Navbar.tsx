@@ -1,9 +1,13 @@
 import React from "react";
 
-export default function Navbar() {
+type funcProps = {
+    onSearch: (search: string, location: string) => void;
+}
+
+export default function Navbar({onSearch}: funcProps) {
     function handleInput(e: React.BaseSyntheticEvent<SubmitEvent>) {
         e.preventDefault();
-        console.log(e.target[0].value,e.target[1].value);
+        onSearch(e.target[0].value,e.target[1].value);
     }
 
     return(

@@ -6,12 +6,23 @@ import Navbar from './components/Navbar'
 import Home from './components/Home'
 
 function App() {
+  const [input,setInput] = useState({
+    search: "",
+    location: "",
+  })
+
+  function getSearch(search: string, location: string) {
+    setInput({
+      search: search,
+      location: location
+    });
+  }
 
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar onSearch={getSearch} />
       <Routes>
-        <Route path="/" element={<Home />}/>
+        <Route path="/" element={<Home searchResults={input}/>}/>
       </Routes>
     </BrowserRouter>
   )
