@@ -1,19 +1,27 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 type funcProps = {
     onSearch: (search: string, location: string) => void;
 }
 
 export default function Navbar({onSearch}: funcProps) {
+    const navigate = useNavigate();
     function handleInput(e: React.BaseSyntheticEvent<SubmitEvent>) {
         e.preventDefault();
-        onSearch(e.target[0].value,e.target[1].value);
+        // onSearch(e.target[0].value,e.target[1].value);
+        navigate('/results', {
+            state: {
+                search: e.target[0].value,
+                location: e.target[1].value
+            }
+        })
     }
 
     return(
         <div className="navbar bg-base-100 flex justify-between">
             <div>
-                <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+                <a className="btn btn-ghost normal-case text-xl">MeatUp</a>
             </div>
             <div className="form-control">
                 <form className="input-group" onSubmit={handleInput}>
