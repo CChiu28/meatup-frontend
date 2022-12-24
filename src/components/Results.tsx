@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Rating from "./Rating";
+import YelpSidebar from "./YelpSidebar";
 
 type funcProps = {
     searchResults: {
@@ -15,6 +17,8 @@ export default function Results({searchResults}: funcProps) {
             name: "",
             url: "",
             image_url: "",
+            rating: 0,
+            categories: [{title: ""}]
         }],
         region: [],
         total: 0
@@ -44,24 +48,30 @@ export default function Results({searchResults}: funcProps) {
     },[loc])
 
     return(
-        <div className="container">
-            {biz.businesses.map((business: { name: string; id: any; url: string; image_url: string; }) => {
-                if (business) {
-                    return(
-                        <div key={business.id} className="card lg:card-side border border-neutral-800 bg-base-100 shadow-xl m-3">
-                            <figure className="w-1/4"><img className="object-fill"src={business.image_url} alt="Album"/></figure>
-                            <div className="card-body">
-                                <h2 className="card-title">{business.name}</h2>
-                                <p>Click the button to listen on Spotiwhy app.</p>
-                                <div className="card-actions justify-end">
-                                <button className="btn btn-primary">Listen</button>
+        <div className="container flex relative">
+            <YelpSidebar />
+            <div className="">
+                {biz.businesses.map((business) => {
+                    if (business) {
+                        return(
+                            <div key={business.id} className="card lg:card-side h-fit justify-center border border-neutral-800 bg-base-100 hover:shadow-xl m-3">
+                                <figure className="w-1/3"><img className="object-fill"src={business.image_url} alt="Album"/></figure>
+                                <div className="card-body">
+                                    <h2 className="card-title">{business.name}</h2>
+                                    <Rating rating={business.rating}/>
+                                    <div className="flex-row">
+                                        {business.categories.map(cat => <span key={cat.title} className="m-1 p-1 bg-gray-300 rounded-md">{cat.title}</span>)}
+                                    </div>
+                                    <div className="card-actions justify-end">
+                                    <button className="btn btn-primary">Listen</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )
+                        )
+                    }
                 }
-            }
-            )}
+                )}
+            </div>
         </div>
     )
 }
