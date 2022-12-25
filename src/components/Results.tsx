@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { json, useLocation } from "react-router-dom";
 import Rating from "./Rating";
 import YelpSidebar from "./YelpSidebar";
+import { getTime } from "../utils";
 
 type funcProps = {
     searchResults: {
@@ -53,11 +54,23 @@ export default function Results({searchResults}: funcProps) {
             <div className="">
                 {biz.businesses.map((business) => {
                     if (business) {
+                        let id;
+                        fetch(`http://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/business/${business.id}`, {
+                            method: 'POST',
+                            headers: {
+                                "Content-type":"application/json",
+                                'Accept': 'application/json',
+                                'Access-Control-Allow-Origin': '*'
+                            },
+                        })
+                            .then(data => data.json())
+                            .then(res => id=res.id)
                         return(
                             <div key={business.id} className="card lg:card-side h-fit justify-center border border-neutral-800 bg-base-100 hover:shadow-xl m-3">
                                 <figure className="w-1/3"><img className="object-fill"src={business.image_url} alt="Album"/></figure>
                                 <div className="card-body">
                                     <h2 className="card-title">{business.name}</h2>
+                                    {"id:"+id}
                                     <Rating rating={business.rating}/>
                                     <div className="flex-row">
                                         {business.categories.map(cat => <span key={cat.title} className="m-1 p-1 bg-gray-300 rounded-md">{cat.title}</span>)}

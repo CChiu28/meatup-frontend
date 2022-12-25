@@ -1,11 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-type funcProps = {
-    onSearch: (search: string, location: string) => void;
-}
-
-export default function Navbar({onSearch}: funcProps) {
+export default function Navbar() {
     const navigate = useNavigate();
     function handleInput(e: React.BaseSyntheticEvent<SubmitEvent>) {
         e.preventDefault();
