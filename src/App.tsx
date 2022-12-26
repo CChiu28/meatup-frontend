@@ -21,10 +21,10 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar onSearch={getSearch} />
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />}/>
-        <Route path='/results' element={<Results searchResults={input} />} />
+        <Route path='/results' element={<Results />} />
       </Routes>
     </BrowserRouter>
     // <>

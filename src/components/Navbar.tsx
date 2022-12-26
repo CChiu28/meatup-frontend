@@ -5,7 +5,6 @@ export default function Navbar() {
     const navigate = useNavigate();
     function handleInput(e: React.BaseSyntheticEvent<SubmitEvent>) {
         e.preventDefault();
-        // onSearch(e.target[0].value,e.target[1].value);
         navigate('/results', {
             state: {
                 search: e.target[0].value,
@@ -15,7 +14,7 @@ export default function Navbar() {
     }
 
     return(
-        <div className="navbar bg-base-100 flex justify-between">
+        <div className="navbar sticky top-0 z-50 border-b border-inherit bg-base-100 flex justify-between">
             <div>
                 <a className="btn btn-ghost normal-case text-xl">MeatUp</a>
             </div>
