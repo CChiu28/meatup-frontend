@@ -1,8 +1,9 @@
 import React from "react";
+import CategoryDisplay from "./CategoryDisplay";
 
 interface Props {
     getFilters: any,
-    categories: string[]
+    categories: string[],
 }
 
 export default function YelpSidebar({getFilters, categories}: Props) {
@@ -92,9 +93,10 @@ export default function YelpSidebar({getFilters, categories}: Props) {
                 </div>
             </div>
             <span className="h-[1px] m-1 w-full bg-red-600"></span>
-            <div>
+            {/* <div>
                 {categories.map(cat => <button key={cat} type="button" className="rounded-full border p-2 m-1">{cat}</button>)}
-            </div>
+            </div> */}
+            <CategoryDisplay cats={categories}/>
             <span className="h-[1px] m-1 w-full bg-red-600"></span>
             <div>
                 <input type="radio" name="radio-1" className="" />

@@ -1,9 +1,6 @@
 import React from "react";
 
-type funcProps = {
-    rating: number
-}
-export default function Rating({rating}: funcProps) {
+export default function Rating({rating}: {rating: number}) {
     const stars = [star,star,star,star,star]
 
     return(

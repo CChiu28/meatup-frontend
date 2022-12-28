@@ -6,31 +6,31 @@ import { getTime } from "../utils";
 import checkIcon from "../assets/check.svg";
 import crossIcon from "../assets/x.svg";
 
-interface Business {
-    businesses: Array<{
+interface Businesses {
+    businesses: {
         id: string,
         name: string,
         url: string,
         image_url: string,
         rating: number,
-        categories: Array<{title: string}>,
+        categories: {title: string}[],
         review_count: number,
         location: {
-            display_address: Array<string>
+            display_address: string[]
         },
         display_phone: string,
         price: string,
-        transactions: Array<string>,
-    }>,
-    region: Array<any>,
+        transactions: string[],
+    }[],
+    region: any[],
     total: number
 }
 
 export default function Results() {
-    const [biz,setBiz] = useState<Business>();
-    const bizRef = useRef<Business>();
+    const [biz,setBiz] = useState<Businesses>();
+    const bizRef = useRef<Businesses>();
     const transactions: string[] = ["delivery","pickup"];
-    const category = useRef<Array<string>>([]);
+    const category = useRef<string[]>([]);
     const loc = useLocation();
     const navigate = useNavigate();
 

@@ -1,5 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Login from "./Login";
 
 export default function Navbar() {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function Navbar() {
     return(
         <div className="navbar sticky top-0 z-50 border-b border-inherit bg-base-100 flex justify-between">
             <div>
-                <a className="btn btn-ghost normal-case text-xl">MeatUp</a>
+                <Link className="btn btn-ghost normal-case text-xl" to="/">MeatUp</Link>
             </div>
             <div className="form-control">
                 <form className="input-group" onSubmit={handleInput}>
@@ -29,23 +30,7 @@ export default function Navbar() {
                     </button>
                 </form>
             </div>
-            <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                    <div className="w-10 rounded-full">
-                        <img src="https://placeimg.com/80/80/people" />
-                    </div>
-                </label>
-                <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
-                    <li>
-                        <a className="justify-between">
-                            Profile
-                            <span className="badge">New</span>
-                        </a>
-                    </li>
-                    <li><a>Settings</a></li>
-                    <li><a>Logout</a></li>
-                </ul>
-            </div>
+            <Login />
         </div>
     )
 }

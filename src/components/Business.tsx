@@ -7,21 +7,21 @@ interface Business {
     url: string,
     image_url: string,
     rating: number,
-    categories: Array<{title: string}>,
+    categories: {title: string}[],
     review_count: number,
     location: {
-        display_address: Array<string>
+        display_address: string[]
     },
     display_phone: string,
     price: string,
-    transactions: Array<string>,
-    special_hours: Array<Time>,
-    photos: Array<String>,
-    hours: Array<{
+    transactions: string[],
+    special_hours: Time[],
+    photos: string[],
+    hours: {
         hours_type: string,
         is_open_now: boolean,
-        open: Array<Time>
-    }>
+        open: Time[]
+    }[]
 }
 
 interface Time {
