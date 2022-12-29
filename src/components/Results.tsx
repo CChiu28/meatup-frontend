@@ -67,7 +67,7 @@ export default function Results() {
     },[loc])
 
     function getFilter(e: { target: { name: string | number; textContent: string; }; }): void {
-        console.log(e);
+        console.log(e.target.textContent);
         if (bizRef.current) {
             const newBiz = bizRef.current.businesses.filter(business => {
                 type objKey = keyof typeof business;
