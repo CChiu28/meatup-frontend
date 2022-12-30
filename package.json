@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chatscope/chat-ui-kit-react": "^1.9.9",
     "@reduxjs/toolkit": "^1.9.1",
     "daisyui": "^2.46.0",
     "dayjs": "^1.11.7",

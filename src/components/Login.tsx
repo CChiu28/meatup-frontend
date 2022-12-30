@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { getAuth, GithubAuthProvider, onAuthStateChanged, signOut, signInWithPopup } from "firebase/auth";
+import { SidebarContext } from "../App";
 
 interface User {
     name: string | null,
@@ -9,15 +10,17 @@ export default function Login() {
     const auth = getAuth();
     const gitLogin = new GithubAuthProvider();
     const [user, setUser] = useState<User|null>();
+    const context = useContext(SidebarContext);
 
     useEffect(() => {
         onAuthStateChanged(auth,(user) => {
-            if (user)
+            if (user) {
+                context.user = user.displayName;
                 setUser({
                     name: user.displayName,
                     photoUrl: user.photoURL,
                 })
-            else setUser(null);
+            } else setUser(null);
         })
     },[])
 
