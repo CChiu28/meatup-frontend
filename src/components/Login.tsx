@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { getAuth, GithubAuthProvider, onAuthStateChanged, signOut, signInWithPopup } from "firebase/auth";
+import { getAuth, GithubAuthProvider, onAuthStateChanged, signOut, signInWithPopup, GoogleAuthProvider, AuthProvider, signInWithEmailAndPassword } from "firebase/auth";
 import { SidebarContext } from "../App";
 
 interface User {
@@ -9,13 +9,16 @@ interface User {
 export default function Login() {
     const auth = getAuth();
     const gitLogin = new GithubAuthProvider();
+    const googleLogin = new GoogleAuthProvider();
     const [user, setUser] = useState<User|null>();
     const context = useContext(SidebarContext);
 
     useEffect(() => {
         onAuthStateChanged(auth,(user) => {
             if (user) {
-                context.user = user.displayName;
+                console.log(user)
+                user.displayName ? context.user = user.displayName : context.user = user.email;
+                context.userId = user.uid;
                 setUser({
                     name: user.displayName,
                     photoUrl: user.photoURL,
@@ -40,15 +43,28 @@ export default function Login() {
                 </>
             )
         } else return(
-            <li onClick={async () => await signIn()}>
-                <a className="justify-between">Log In</a>
-            </li>
+            <>
+                {/* <li onClick={async () => await signIn(gitLogin)}>
+                    <a className="justify-between">Github</a>
+                </li>
+                <li onClick={async () => await signIn(googleLogin)}>
+                    <a className="justify-between">Google</a>
+                </li> */}
+                <li>
+                    <label htmlFor="my-modal-4" className="justify-beween">open modal</label>
+                </li>
+            </>
         )
     }
 
-    async function signIn() {
-        const res = await signInWithPopup(auth,gitLogin);
+    async function signIn(provider: AuthProvider) {
+        const res = await signInWithPopup(auth,provider);
         console.log(res.user)
+    }
+
+    function handleLogin(e: React.BaseSyntheticEvent<SubmitEvent>) {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth,e.target[0].value,e.target[1].value);
     }
 
     return(
@@ -61,6 +77,26 @@ export default function Login() {
             <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
                 {signedInStatus()}
             </ul>
+            <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+            <label htmlFor="my-modal-4" className="modal cursor-pointer">
+                <label className="modal-box relative" htmlFor="">
+                    <ul className="menu">
+                        <li onClick={async () => await signIn(gitLogin)}>
+                            <a className="justify-between">Github</a>
+                        </li>
+                        <li onClick={async () => await signIn(googleLogin)}>
+                            <a className="justify-between">Google</a>
+                        </li>
+                        <li>
+                            <form className="flex flex-col" onSubmit={handleLogin}>
+                                <input type="email" placeholder="email" name="email" className="input border-inherit" />
+                                 <input type="password" placeholder="password" name="password" className="input border-inherit" />
+                                 <button className="btn">Log In</button>
+                            </form>
+                        </li>
+                    </ul>
+                </label>
+            </label>
         </div>
     )
 }

@@ -11,12 +11,16 @@ import ChatSidebar from './components/ChatSidebar';
 interface user {
   sidebarStatus: boolean,
   user: string | null,
-  business: string | null
+  userId: string,
+  businessId: string | boolean,
+  businessName: string,
 }
 const test = {
   sidebarStatus: false,
   user: "",
-  business: ""
+  userId: "",
+  businessId: "",
+  businessName: ""
 }
 export const SidebarContext = createContext<user>(test);
 

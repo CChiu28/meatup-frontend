@@ -30,7 +30,7 @@ interface Businesses {
 
 export default function Results() {
     const [biz,setBiz] = useState<Businesses>();
-    const [showSidebar,setShowSidebar] = useState<string|null>(null);
+    const [showSidebar,setShowSidebar] = useState<boolean>(false);
     const bizRef = useRef<Businesses>();
     const transactions: string[] = ["delivery","pickup"];
     const category = useRef<string[]>([]);
@@ -96,9 +96,10 @@ export default function Results() {
         })
     }
 
-    function showChatWindow(bid: string|null) {
-        setShowSidebar(bid);
-        context.business = bid;
+    function showChatWindow(bid: string | boolean, bizName: string) {
+        context.businessName = bizName
+        setShowSidebar(!showSidebar);
+        context.businessId = bid;
     }
 
     return(
@@ -141,7 +142,7 @@ export default function Results() {
                                 </div>
                             </div>
                             <div className="card-actions justify-end">
-                                <button className="btn btn-primary" onClick={() => showChatWindow(business.id)}>Listen</button>
+                                <button className="btn btn-primary" onClick={() => showChatWindow(business.id,business.name)}>Listen</button>
                             </div>
                         </div>
                     )
