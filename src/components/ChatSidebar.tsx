@@ -18,7 +18,7 @@ export default function ChatSidebar({showSidebar,closeSidebar}: props) {
 
     return(
         <div>
-            <div className={`top-0 right-0 w-[35vw] bg-gray-600 p-10 pl-10 text-white fixed h-full z-40 ease-in-out duration-300 
+            <div className={`top-0 right-0 w-[35vw] bg-gray-600 p-10 pl-6 text-white fixed h-full z-40 ease-in-out duration-300 
                     ${showSidebar ? "translate-x-0 " : "translate-x-full"}`}>
                 <button className="flex text-4xl text-white items-center cursor-pointer mt-8 z-50" onClick={() => closeSidebar(false,"")}>
                     x

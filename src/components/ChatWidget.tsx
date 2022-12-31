@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { MainContainer, ChatContainer, ConversationHeader, MessageList, MessageInput, Message } from "@chatscope/chat-ui-kit-react";
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { SidebarContext } from "../App";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 interface ChatProps {
     userName: string | null,
@@ -9,47 +10,34 @@ interface ChatProps {
 }
 export default function ChatWidget({userName, business}: ChatProps) {
     const [messages,setMessages] = useState<any>();
-    const messagesRef = useRef();
+    const auth = getAuth();
     const context = useContext(SidebarContext);
 
     useEffect(() => {
-        (async () => {
-            console.log(userName,business)
-            if (business!=="") {
-                const obj = JSON.stringify({
-                    businessId: business,
-                    chatroomId: "5AsOM2VGz2",
-                    user: userName,
-                    content: null
-                })
-                const res = await fetch(`http://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/getAllMsg`, {
-                // const res = await fetch(`http://localhost:8080/api/getAllMsg`, {
-                    method: "POST",
-                    body: obj,
-                    headers: {
-                        "content-type": "application/json",
-                    }
-                });
-                const data = await res.json();
-                console.log(data)
-                messagesRef.current = data;
-                setMessages(data);
-            }   
-        })();
-    },[context.businessId])
+        renderMessages();
+    },[business])
 
-    function objMap() {
-        const listOfMessages = [];
-        for (const property in messages) {
-            for(const body in messages[property]) {
-                listOfMessages.push({
-                    message: messages[property][body],
-                    sentTime: body,
-                    sender: property,
-                });
-            }
+    async function renderMessages() {
+        console.log(context.userId,business)
+        if (business!=="") {
+            const obj = JSON.stringify({
+                businessId: business,
+                chatroomId: "5AsOM2VGz2",
+                user: userName,
+                content: null
+            })
+            const res = await fetch(`http://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/getAllMsg`, {
+            // const res = await fetch(`http://localhost:8080/api/getAllMsg`, {
+                method: "POST",
+                body: obj,
+                headers: {
+                    "content-type": "application/json",
+                }
+            });
+            const data = await res.json();
+            console.log(data);
+            setMessages(data);
         }
-        return listOfMessages;
     }
 
     async function sendMsg(e: string) {
@@ -59,18 +47,21 @@ export default function ChatWidget({userName, business}: ChatProps) {
         const obj = {
             businessId: business,
             chatroomId: "5AsOM2VGz2",
-            user: context.userId,
             content: {
-                [date.toString()]: e,
+                user: context.userId,
+                time: date,
+                body: e
             }
         }
         await fetch(`http://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/sendMsg`, {
+            // const res = await fetch(`http://localhost:8080/api/sendMsg`, {
             method: "POST",
             body: JSON.stringify(obj),
             headers: {
                 "content-type": "application/json",
             }
         });
+        renderMessages();
     }
 
     return(
@@ -81,12 +72,14 @@ export default function ChatWidget({userName, business}: ChatProps) {
                         <ConversationHeader.Content userName={context.user} />
                     </ConversationHeader>
                     <MessageList>
-                        {messages && objMap().map(el => <Message key={el.sentTime} model={{
-                                message: el.message,
-                                sentTime: el.sentTime,
-                                sender: el.sender
+                        {messages && messages.map((el: any) => <Message key={el.time} model={{
+                                message: el.body,
+                                sentTime: el.time.toString(),
+                                sender: el.user,
+                                direction: (el.user===context.userId ? "outgoing" : "incoming"),
+                                position: "single",
                             }}>
-                                <Message.Footer sender={el.sender} sentTime={el.sentTime} />
+                                <Message.Footer sender={el.user} sentTime={el.time.toString()} />
                             </Message>
                         )}
                     </MessageList>
