@@ -42,7 +42,8 @@ export default function Results() {
         const obj = JSON.stringify(loc.state);
         console.log(obj)
         if (!(loc.state.location==''&&loc.state.search==='')) {
-            fetch('https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/search', {
+            // fetch('https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/search', {
+            fetch('http://localhost:8080/api/search' , {
                 method: 'POST',
                 headers: {
                     "Content-type":"application/json",

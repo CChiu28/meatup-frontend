@@ -39,7 +39,8 @@ export default function Business() {
 
     useEffect(() => {
         (async () => {
-            const res = await fetch(`https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/business`, {
+            // const res = await fetch(`https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/business`, {
+                const res = await fetch('http://localhost:8080/api/business' , {
                 method: 'POST',
                 body: loc.state.id,
             });
