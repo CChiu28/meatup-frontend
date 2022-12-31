@@ -26,7 +26,7 @@ export default function ChatWidget({userName, business}: ChatProps) {
                 user: userName,
                 content: null
             })
-            const res = await fetch(`http://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/getAllMsg`, {
+            const res = await fetch(`https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/getAllMsg`, {
             // const res = await fetch(`http://localhost:8080/api/getAllMsg`, {
                 method: "POST",
                 body: obj,
@@ -53,7 +53,7 @@ export default function ChatWidget({userName, business}: ChatProps) {
                 body: e
             }
         }
-        await fetch(`http://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/sendMsg`, {
+        await fetch(`https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/sendMsg`, {
             // const res = await fetch(`http://localhost:8080/api/sendMsg`, {
             method: "POST",
             body: JSON.stringify(obj),
