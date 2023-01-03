@@ -7,6 +7,7 @@ import checkIcon from "../assets/check.svg";
 import crossIcon from "../assets/x.svg";
 import ChatSidebar from "./ChatSidebar";
 import { SidebarContext } from "../App";
+import { getAuth } from "firebase/auth";
 
 interface Businesses {
     businesses: {
@@ -35,6 +36,7 @@ export default function Results() {
     const transactions: string[] = ["delivery","pickup"];
     const category = useRef<string[]>([]);
     const loc = useLocation();
+    const auth = getAuth();
     const navigate = useNavigate();
     const context = useContext(SidebarContext);
 
@@ -143,7 +145,9 @@ export default function Results() {
                                 </div>
                             </div>
                             <div className="card-actions justify-end">
-                                <button className="btn btn-primary" onClick={() => showChatWindow(business.id,business.name)}>Listen</button>
+                                {auth.currentUser
+                                    ? <button className="btn btn-primary" onClick={() => showChatWindow(business.id,business.name)}>Chat!</button>
+                                    : <span>Sign in to chat!</span>}
                             </div>
                         </div>
                     )
