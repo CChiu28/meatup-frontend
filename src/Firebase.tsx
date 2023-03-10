@@ -1,0 +1,14 @@
+import { initializeApp } from 'firebase/app';
+
+const firebaseConfig = {
+    apiKey: `${import.meta.env.VITE_FIREBASE_KEY}`,
+    authDomain: "meatup-28a8e.firebaseapp.com",
+    projectId: "meatup-28a8e",
+    storageBucket: "meatup-28a8e.appspot.com",
+    messagingSenderId: "848230416037",
+    appId: "1:848230416037:web:cf5661f0386f08e4cfd74c"
+};
+
+const app = initializeApp(firebaseConfig);
+
+export default app;

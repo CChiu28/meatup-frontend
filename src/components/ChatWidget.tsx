@@ -3,6 +3,8 @@ import { MainContainer, ChatContainer, ConversationHeader, MessageList, MessageI
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { SidebarContext } from "../App";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, onSnapshot, collection, getDocs } from "firebase/firestore";
+import app from "../Firebase";
 import { getTime } from "../utils";
 
 interface ChatProps {
@@ -13,6 +15,7 @@ export default function ChatWidget({userName, business}: ChatProps) {
     const [messages,setMessages] = useState<any>();
     const auth = getAuth();
     const context = useContext(SidebarContext);
+    // const unsub = onSnapshot(doc(db,"chatrooms",""));
 
     useEffect(() => {
         const controller = new AbortController();
@@ -25,8 +28,13 @@ export default function ChatWidget({userName, business}: ChatProps) {
                 user: userName,
                 content: null
             })
+            // const db = getFirestore(app);
+            // const unsub = onSnapshot(doc(db,"chatrooms",`${business}`), (doc) => {
+            //     console.log(doc.data());
+            // });
             // const res = await fetch(`https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/getAllMsg`, {
-            fetch(`http://localhost:8080/api/getAllMsg`, {
+            fetch("https://meatup-cmdt.onrender.com/api/getAllMsg", {
+            // fetch(`http://localhost:8080/api/getAllMsg`, {
                 signal,
                 method: "POST",
                 body: obj,
@@ -61,7 +69,7 @@ export default function ChatWidget({userName, business}: ChatProps) {
             }
         }
         // await fetch(`https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/sendMsg`, {
-        const res = await fetch(`http://localhost:8080/api/sendMsg`, {
+        const res = await fetch("https://meatup-cmdt.onrender.com/api/sendMsg", {
             method: "POST",
             body: JSON.stringify(obj),
             headers: {
