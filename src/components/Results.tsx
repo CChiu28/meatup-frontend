@@ -41,7 +41,19 @@ export default function Results() {
     const context = useContext(SidebarContext);
 
     useEffect(() => {
-        const obj = JSON.stringify(loc.state);
+        let obj;
+        console.log(loc.state)
+        if (loc.state.location) {
+            obj = JSON.stringify(loc.state);
+        } else {
+            console.log(loc.state.search)
+            const bod = {
+                search : loc.state.search,
+                latitude : context.position[0],
+                longitude : context.position[1],
+            }
+            obj = JSON.stringify(bod);
+        }
         console.log(obj)
         if (!(loc.state.location==''&&loc.state.search==='')) {
             // fetch('https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/search', {
@@ -75,7 +87,7 @@ export default function Results() {
     },[loc])
 
     function getFilter(e: { target: { name: string | number; textContent: string; }; }): void {
-        console.log(e.target.textContent);
+        console.log(e.target.textContent, e.target.name);
         if (bizRef.current) {
             const newBiz = bizRef.current.businesses.filter(business => {
                 type objKey = keyof typeof business;
@@ -92,8 +104,24 @@ export default function Results() {
         }
     }
 
+    function getCategoryFilters(e: { target: any; }): void {
+        console.log(e, bizRef.current);
+        if (bizRef.current) {
+            const newBiz = bizRef.current.businesses.filter(business => {
+                type objKey = keyof typeof business;
+                const property = e.target.name as objKey;
+                const cats = business[property] as { title: string; }[];
+                const biz = cats.filter(cat => {
+                    return cat.title === e.target.textContent;
+                })
+                console.log(biz)
+            })
+            // console.log(newBiz)
+        }
+    }
+
     function getBusiness(id: string) {
-        navigate(`/results/${id}`, {
+        navigate(`/results/${loc.state.search}/${id}`, {
             state: {
                 id: id,
             }
@@ -109,7 +137,7 @@ export default function Results() {
     return(
         <div className="flex">
             <ChatSidebar showSidebar={showSidebar} closeSidebar={showChatWindow}/>
-            <YelpSidebar getFilters={getFilter} categories={category.current} />
+            <YelpSidebar getFilters={getFilter} getCategoryFilters={getCategoryFilters} categories={category.current} />
             <main className="flex flex-col justify-center ml-[300px]">
                 <div className="m-1 p-1">
                     <h1 className="text-5xl">{loc.state.search} around {loc.state.location}</h1>

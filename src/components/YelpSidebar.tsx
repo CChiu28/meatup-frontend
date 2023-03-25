@@ -4,9 +4,10 @@ import CategoryDisplay from "./CategoryDisplay";
 interface Props {
     getFilters: any,
     categories: string[],
+    getCategoryFilters: any,
 }
 
-export default function YelpSidebar({getFilters, categories}: Props) {
+export default function YelpSidebar({getFilters, categories, getCategoryFilters}: Props) {
 
     function openSidebar() {
 
@@ -96,7 +97,7 @@ export default function YelpSidebar({getFilters, categories}: Props) {
             {/* <div>
                 {categories.map(cat => <button key={cat} type="button" className="rounded-full border p-2 m-1">{cat}</button>)}
             </div> */}
-            <CategoryDisplay cats={categories}/>
+            <CategoryDisplay cats={categories} getCategoryFilters={getCategoryFilters} />
             <span className="h-[1px] m-1 w-full bg-red-600"></span>
             <div>
                 <input type="radio" name="radio-1" className="" />

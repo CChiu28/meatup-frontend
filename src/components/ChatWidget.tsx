@@ -28,10 +28,10 @@ export default function ChatWidget({userName, business}: ChatProps) {
                 user: userName,
                 content: null
             })
-            // const db = getFirestore(app);
-            // const unsub = onSnapshot(doc(db,"chatrooms",`${business}`), (doc) => {
-            //     console.log(doc.data());
-            // });
+            const db = getFirestore(app);
+            const unsub = onSnapshot(doc(db,"chatrooms",`${business}`), (doc) => {
+                console.log(doc.data());
+            });
             // const res = await fetch(`https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/getAllMsg`, {
             fetch("https://meatup-cmdt.onrender.com/api/getAllMsg", {
             // fetch(`http://localhost:8080/api/getAllMsg`, {
