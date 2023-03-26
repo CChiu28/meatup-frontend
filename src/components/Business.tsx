@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Rating from "./Rating";
 
 interface Business {
     id: string,
@@ -21,7 +22,8 @@ interface Business {
         hours_type: string,
         is_open_now: boolean,
         open: Time[]
-    }[]
+    }[],
+    distance: number
 }
 
 interface Time {
@@ -39,21 +41,41 @@ export default function Business() {
 
     useEffect(() => {
         (async () => {
-            const res = await fetch(`https://meatup-cmdt.onrender.com/api/business`, {
-                // const res = await fetch('http://localhost:8080/api/business' , {
+            // const res = await fetch(`https://meatup-cmdt.onrender.com/api/business`, {
+                const res = await fetch('http://localhost:8080/api/business' , {
                 method: 'POST',
                 body: loc.state.id,
             });
             const data = await res.json();
+            console.log(data)
             setBiz(data);
         })();
     },[])
 
     return(
-        <div className="container flex flex-col">
+        <>
+            {biz &&
             <div>
-                <h1>{biz && biz.name}</h1>
+                <div className="relative flex flex-row w-full shadow-md border border-inherit rounded-md">
+                        {biz.photos.map((pic,index) => {
+                            return(
+                                <figure key={index} className="flex w-full brightness-50">
+                                    <img src={pic} className="object-cover"/>
+                                </figure>
+                            )
+                        })}
+                        <div className="absolute bottom-10 left-32 w-auto border border-red-500">
+                            <h1 className="text-5xl text-white font-extrabold">{biz.name}</h1>
+                            <div className="flex justify-start m-1 w-auto">
+                                <Rating rating={biz.rating}/>
+                                <span>{biz.review_count}</span>
+                            </div>
+                        </div>
+                </div>
+                <div className="container mx-auto flex flex-col">
+                </div>
             </div>
-        </div>
+            }
+        </>
     )
 }

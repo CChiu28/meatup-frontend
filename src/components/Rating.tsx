@@ -14,7 +14,7 @@ function star(index: number, rate: number) {
     const emptyStar = index>rate ? "text-gray-300" : "text-yellow-400";
     // console.log(index,rate)
     return(
-        <svg key={index} className={`w-5 h-5 ${emptyStar}`} fill={index===rate ? "url(#half)" : "currentColor"} viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg key={index} className={`w-5 h-auto ${emptyStar}`} fill={index===rate ? "url(#half)" : "currentColor"} viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="half">
                     <stop offset="50%" stopColor="rgb(250,204,21)"/>

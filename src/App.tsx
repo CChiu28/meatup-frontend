@@ -32,10 +32,6 @@ export const SidebarContext = createContext<user>(test);
 export const LocationContext = createContext<{ loc: string, setLocation: any}>(locationContext);
 
 function App() {
-  const [input,setInput] = useState({
-    search: "",
-    location: "",
-  })
   const [locationError,setLocationError] = useState(false);
   const [loc,setLocation] = useState('');
   const value = { loc, setLocation };
@@ -45,13 +41,6 @@ function App() {
       test.position = [pos.coords.latitude,pos.coords.longitude];
     })
   },[])
-
-  function getSearch(search: string, location: string) {
-    setInput({
-      search: search,
-      location: location
-    });
-  }
 
   function setError(bool:boolean) {
     setLocationError(bool);

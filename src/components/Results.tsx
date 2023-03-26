@@ -24,6 +24,7 @@ interface Businesses {
         display_phone: string,
         price: string,
         transactions: string[],
+        distance: number,
     }[],
     region: any[],
     total: number
@@ -35,6 +36,7 @@ export default function Results() {
     const bizRef = useRef<Businesses>();
     const transactions: string[] = ["delivery","pickup"];
     const category = useRef<string[]>([]);
+    const distanceRef = useRef<number[]>([]);
     const loc = useLocation();
     const auth = getAuth();
     const navigate = useNavigate();
@@ -57,8 +59,8 @@ export default function Results() {
         console.log(obj)
         if (!(loc.state.location==''&&loc.state.search==='')) {
             // fetch('https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/search', {
-                fetch('https://meatup-cmdt.onrender.com/api/search', {
-            // fetch('http://localhost:8080/api/search' , {
+                // fetch('https://meatup-cmdt.onrender.com/api/search', {
+            fetch('http://localhost:8080/api/search' , {
                 method: 'POST',
                 headers: {
                     "Content-type":"application/json",
@@ -69,10 +71,11 @@ export default function Results() {
             })
                 .then(data => data.json())
                 .then(body => {
+                    // console.log(body)
                     if (body.status!=500) {
                         if (category.current.length!==0)
                             category.current = [];
-                        body.businesses.map((business: { categories: []; }) => {
+                        body.businesses.map((business: { categories: [], distance: number }) => {
                             business.categories.forEach((cat: { title: string; }) => {
                                 if (!category.current.includes(cat.title))
                                     category.current.push(cat.title);
@@ -120,10 +123,11 @@ export default function Results() {
         }
     }
 
-    function getBusiness(id: string) {
-        navigate(`/results/${loc.state.search}/${id}`, {
+    function getBusiness(name:string, id: string) {
+        navigate(`/results/${loc.state.search}/${name}`, {
             state: {
                 id: id,
+                name: name
             }
         })
     }
@@ -137,21 +141,21 @@ export default function Results() {
     return(
         <div className="flex">
             <ChatSidebar showSidebar={showSidebar} closeSidebar={showChatWindow}/>
-            <YelpSidebar getFilters={getFilter} getCategoryFilters={getCategoryFilters} categories={category.current} />
-            <main className="flex flex-col justify-center ml-[300px]">
+            {biz && <YelpSidebar getFilters={getFilter} getCategoryFilters={getCategoryFilters} categories={category.current} />}
+            {biz && <main className="flex flex-col justify-center ml-[300px]">
                 <div className="m-1 p-1">
                     <h1 className="text-5xl">{loc.state.search} around {loc.state.location}</h1>
                 </div>
-                {biz && biz.businesses.map((business) => {
+                {biz.businesses.map((business) => {
                     return(
                         <div key={business.id} className="card lg:card-side h-80 border border-neutral-800 bg-base-100 hover:shadow-xl m-3 hover:cursor-pointer">
-                            <div className="flex rounded-md" onClick={() => getBusiness(business.id)}>
+                            <div className="flex rounded-md" onClick={() => getBusiness(business.name,business.id)}>
                                 <figure className="w-1/3 m-3">
-                                    <img className="w-full h-full"src={business.image_url} alt="Album"/>
+                                    <img className="w-full h-full object-cover"src={business.image_url} alt="Album"/>
                                 </figure>
                                 <div className="card-body p-4">
                                     <h2 className="card-title text-3xl m-1 p-2 border rounded-md max-w-max">{business.name}</h2>
-                                    <div className="flex justify-start m-1">
+                                    <div className="flex justify-start m-1 w-auto">
                                         <Rating rating={business.rating}/>
                                         <span>{business.review_count}</span>
                                     </div>
@@ -181,7 +185,7 @@ export default function Results() {
                         </div>
                     )
                 })}
-            </main>
+            </main>}
         </div>
     )
 }
