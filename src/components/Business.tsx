@@ -39,12 +39,23 @@ interface Time {
 
 interface biz {
     business: Business,
-    reviews: Reviews[],
+    reviews: Reviews,
 }
 
 interface Reviews {
     total: number,
-    reviews: []
+    reviews: {
+        id: string,
+        url: string,
+        text: string,
+        rating: number,
+        time_created: string,
+        user: {
+            id: string,
+            image_url: string,
+            name: string,
+        }
+    }[]
 }
 
 export default function Business() {
@@ -65,7 +76,7 @@ export default function Business() {
             })
             const businessData = await business.json();
             const reviewData = await reviews.json();
-            console.log(businessData)
+            console.log(reviewData)
             setBiz({
                     business: businessData,
                     reviews: reviewData,
@@ -94,30 +105,61 @@ export default function Business() {
                             </div>
                     </div>
                     <div className="container mx-auto flex flex-col">
-                        <table className="border border-inherit">
-                            <thead>
-                                <tr className="bg-slate-300">
-                                    <th className="border border-inherit ">Day</th>
-                                    <th className="border border-inherit ">Operating hours</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {biz.business.hours.map((hour,i) =>
-                                    hour.open.map((time,i) => {
-                                        return(
-                                            <tr key={i}>
-                                                <td className="border border-inherit text-center">
-                                                    {days[i]}
-                                                </td>
-                                                <td className="border border-inherit text-center">
-                                                    {convert24To12(time.start)} - {convert24To12(time.end)}
-                                                </td>
-                                            </tr>
-                                        )
-                                    })
-                                )}
-                            </tbody>
-                        </table>
+                        <div className="card shadow-md border border-inherit p-5 m-3 flex flex-row">
+                            <div className="flex flex-col">
+                                {biz.business.location.display_address.map((address,i) => <span key={i}>{address}</span>)}
+                                {biz.business.display_phone}
+                            </div>
+                            <table className="border border-inherit">
+                                <thead>
+                                    <tr className="bg-slate-300">
+                                        <th className="border border-inherit ">Day</th>
+                                        <th className="border border-inherit ">Operating hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {biz.business.hours.map((hour,i) =>
+                                        hour.open.map((time,i) => {
+                                            return(
+                                                <tr key={i}>
+                                                    <td className="border border-inherit text-center">
+                                                        {days[i]}
+                                                    </td>
+                                                    <td className="border border-inherit text-center">
+                                                        {convert24To12(time.start)} - {convert24To12(time.end)}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <ul className="border border-inherit rounded-xl shadow-md p-5 m-3">
+                                {biz.reviews.reviews.map((review,i) => {
+                                    return(
+                                        <li key={i} className="p-3">
+                                            <div className="card lg:card-side p-3 shadow-md border border-inherit block h-4/5">
+                                                <div className="h-fit">
+                                                    <div className="avatar rounded-full">
+                                                        <figure className="w-[10%]">
+                                                            <img src={review.user.image_url} />
+                                                        </figure>
+                                                    </div>
+                                                    {review.user.name}
+                                                    <Rating rating={review.rating} />
+                                                    {review.time_created}
+                                                </div>
+                                                <div>
+                                                    <span>{review.text}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             }
