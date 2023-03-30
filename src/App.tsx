@@ -30,6 +30,7 @@ const locationContext = {
 }
 export const SidebarContext = createContext<user>(test);
 export const LocationContext = createContext<{ loc: string, setLocation: any}>(locationContext);
+// export const chatContext = createContext({});
 
 function App() {
   const [locationError,setLocationError] = useState(false);

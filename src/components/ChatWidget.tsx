@@ -32,8 +32,8 @@ export default function ChatWidget({userName, business}: ChatProps) {
             const unsub = onSnapshot(doc(db,"chatrooms",`${business}`), (doc) => {
                 console.log(doc.data());
             });
-            // const res = await fetch(`https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/getAllMsg`, {
-            fetch("https://meatup-cmdt.onrender.com/api/getAllMsg", {
+            // const res = await fetch(`https://meatup-backend-production.up.railway.app/api/getAllMsg`, {
+            fetch("https://meatup-backend-production.up.railway.app/api/getAllMsg", {
             // fetch(`http://localhost:8080/api/getAllMsg`, {
                 signal,
                 method: "POST",
@@ -69,7 +69,7 @@ export default function ChatWidget({userName, business}: ChatProps) {
             }
         }
         // await fetch(`https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/sendMsg`, {
-        const res = await fetch("https://meatup-cmdt.onrender.com/api/sendMsg", {
+        const res = await fetch("https://meatup-backend-production.up.railway.app/api/sendMsg", {
             method: "POST",
             body: JSON.stringify(obj),
             headers: {

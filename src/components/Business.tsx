@@ -66,11 +66,13 @@ export default function Business() {
     useEffect(() => {
         (async () => {
             // const res = await fetch(`https://meatup-cmdt.onrender.com/api/business`, {
-            const business = await fetch('http://localhost:8080/api/business' , {
+            const business = await fetch(`https://meatup-backend-production.up.railway.app/api/business`, {
+            // const business = await fetch('http://localhost:8080/api/business' , {
                 method: 'POST',
                 body: loc.state.id,
             });
-            const reviews = await fetch('http://localhost:8080/api/reviews', {
+            const reviews = await fetch('https://meatup-backend-production.up.railway.app/api/reviews', {
+            // const reviews = await fetch('http://localhost:8080/api/reviews', {
                 method: 'POST',
                 body: loc.state.id,
             })

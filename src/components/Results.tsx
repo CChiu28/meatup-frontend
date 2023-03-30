@@ -16,7 +16,7 @@ interface Businesses {
         url: string,
         image_url: string,
         rating: number,
-        categories: {title: string}[],
+        categories: string[],
         review_count: number,
         location: {
             display_address: string[]
@@ -58,9 +58,9 @@ export default function Results() {
         }
         console.log(obj)
         if (!(loc.state.location==''&&loc.state.search==='')) {
-            // fetch('https://meatup-env.eba-ayfxsx9m.us-east-1.elasticbeanstalk.com/api/search', {
+            fetch('https://meatup-backend-production.up.railway.app/api/search', {
                 // fetch('https://meatup-cmdt.onrender.com/api/search', {
-            fetch('http://localhost:8080/api/search' , {
+            // fetch('http://localhost:8080/api/search' , {
                 method: 'POST',
                 headers: {
                     "Content-type":"application/json",
@@ -71,14 +71,14 @@ export default function Results() {
             })
                 .then(data => data.json())
                 .then(body => {
-                    // console.log(body)
+                    console.log(body)
                     if (body.status!=500) {
                         if (category.current.length!==0)
                             category.current = [];
                         body.businesses.map((business: { categories: [], distance: number }) => {
-                            business.categories.forEach((cat: { title: string; }) => {
-                                if (!category.current.includes(cat.title))
-                                    category.current.push(cat.title);
+                            business.categories.forEach(cat => {
+                                if (!category.current.includes(cat))
+                                    category.current.push(cat);
                             })
                         })
                         bizRef.current = body;
@@ -97,13 +97,10 @@ export default function Results() {
                 const property = e.target.name as objKey;
                 return business[property] === e.target.textContent;
             })
-            setBiz(prevState => {
-                return {
-                    businesses: newBiz,
-                    region: prevState!.region,
-                    total: prevState!.total
-                }
-        });
+            setBiz({
+                ...biz,
+                businesses: newBiz
+            } as Businesses);
         }
     }
 
@@ -113,13 +110,16 @@ export default function Results() {
             const newBiz = bizRef.current.businesses.filter(business => {
                 type objKey = keyof typeof business;
                 const property = e.target.name as objKey;
-                const cats = business[property] as { title: string; }[];
-                const biz = cats.filter(cat => {
-                    return cat.title === e.target.textContent;
-                })
-                console.log(biz)
+                const cats = business[property] as string[];
+                // const biz = cats.filter(cat => {
+                //     return cat === e.target.textContent;
+                // })
+                return cats.includes(e.target.textContent);
             })
-            // console.log(newBiz)
+            setBiz({
+                ...biz,
+                businesses: newBiz
+            } as Businesses)
         }
     }
 
@@ -160,7 +160,7 @@ export default function Results() {
                                         <span>{business.review_count}</span>
                                     </div>
                                     <div className="flex-row">
-                                        {business.categories.map(cat => <span key={cat.title} className="m-1 p-2 bg-gray-300 rounded-md">{cat.title}</span>)}
+                                        {business.categories.map(cat => <span key={cat} className="m-1 p-2 bg-gray-300 rounded-md">{cat}</span>)}
                                         {business.price!==null && (<span className="bg-gray-300 m-1 p-2 rounded-md">{business.price}</span>)}
                                     </div>
                                     <div className="flex flex-col bg-gray-300 p-2 m-1 rounded-md max-w-max">
