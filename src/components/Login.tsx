@@ -44,14 +44,18 @@ export default function Login() {
             )
         } else return(
             <>
-                {/* <li onClick={async () => await signIn(gitLogin)}>
-                    <a className="justify-between">Github</a>
+                <li onClick={async () => await signIn(gitLogin)}>
+                    <a className="justify-between border border-inherit">Github</a>
                 </li>
                 <li onClick={async () => await signIn(googleLogin)}>
-                    <a className="justify-between">Google</a>
-                </li> */}
+                    <a className="justify-between border border-inherit">Google</a>
+                </li>
                 <li>
-                    <label htmlFor="my-modal-4" className="justify-beween">open modal</label>
+                    <form className="flex flex-col" onSubmit={handleLogin}>
+                        <input type="email" placeholder="email" name="email" className="input border-inherit" />
+                        <input type="password" placeholder="password" name="password" className="input border-inherit" />
+                        <button className="btn">Log In</button>
+                    </form>
                 </li>
             </>
         )
@@ -62,9 +66,10 @@ export default function Login() {
         console.log(res.user)
     }
 
-    function handleLogin(e: React.BaseSyntheticEvent<SubmitEvent>) {
+    async function handleLogin(e: React.BaseSyntheticEvent<SubmitEvent>) {
         e.preventDefault();
-        signInWithEmailAndPassword(auth,e.target[0].value,e.target[1].value);
+        await signInWithEmailAndPassword(auth,e.target[0].value,e.target[1].value);
+        console.log(auth.currentUser);
     }
 
     return(
@@ -74,29 +79,9 @@ export default function Login() {
                     <img src={user ? `${user.photoUrl}` : "https://placeimg.com/80/80/people"} />
                 </div>
             </label>
-            <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
+            <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-auto border">
                 {signedInStatus()}
             </ul>
-            <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-            <label htmlFor="my-modal-4" className="modal cursor-pointer">
-                <label className="modal-box relative" htmlFor="">
-                    <ul className="menu">
-                        <li onClick={async () => await signIn(gitLogin)}>
-                            <a className="justify-between">Github</a>
-                        </li>
-                        <li onClick={async () => await signIn(googleLogin)}>
-                            <a className="justify-between">Google</a>
-                        </li>
-                        <li>
-                            <form className="flex flex-col" onSubmit={handleLogin}>
-                                <input type="email" placeholder="email" name="email" className="input border-inherit" />
-                                 <input type="password" placeholder="password" name="password" className="input border-inherit" />
-                                 <button className="btn">Log In</button>
-                            </form>
-                        </li>
-                    </ul>
-                </label>
-            </label>
         </div>
     )
 }
