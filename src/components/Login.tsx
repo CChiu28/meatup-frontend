@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { getAuth, GithubAuthProvider, onAuthStateChanged, signOut, signInWithPopup, GoogleAuthProvider, AuthProvider, signInWithEmailAndPassword } from "firebase/auth";
 import { SidebarContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 interface User {
     name: string | null,
@@ -12,11 +13,12 @@ export default function Login() {
     const googleLogin = new GoogleAuthProvider();
     const [user, setUser] = useState<User|null>();
     const context = useContext(SidebarContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         onAuthStateChanged(auth,(user) => {
             if (user) {
-                console.log(user.photoURL)
+                // console.log(user.photoURL)
                 user.displayName ? context.user = user.displayName : context.user = user.email;
                 context.userId = user.uid;
                 setUser({
@@ -35,7 +37,11 @@ export default function Login() {
                     <li>
                         <a className="justify-between">
                             Profile
-                            <span className="badge">New</span>
+                        </a>
+                    </li>
+                    <li onClick={goToFriends}>
+                        <a>
+                            Friends
                         </a>
                     </li>
                     <li><a>Settings</a></li>
@@ -63,13 +69,37 @@ export default function Login() {
 
     async function signIn(provider: AuthProvider) {
         const res = await signInWithPopup(auth,provider);
+        const userObj = {
+            uid: res.user.uid,
+            displayName: res.user.displayName,
+            email: res.user.email,
+            photoUrl: res.user.photoURL,
+        }
+        const url = `http://localhost:8080/api/users/add`;
+        await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-type":"application/json",
+                'Accept': 'application/json',
+                // 'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(userObj),
+        })
         console.log(res.user)
     }
 
     async function handleLogin(e: React.BaseSyntheticEvent<SubmitEvent>) {
         e.preventDefault();
-        await signInWithEmailAndPassword(auth,e.target[0].value,e.target[1].value);
+        try {
+            await signInWithEmailAndPassword(auth,e.target[0].value,e.target[1].value);
+        } catch (error) {
+            console.log(error)
+        }
         console.log(auth.currentUser);
+    }
+
+    function goToFriends() {
+        navigate(`/friends`);
     }
 
     return(

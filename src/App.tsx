@@ -7,6 +7,7 @@ import Home from './components/Home';
 import Results from './components/Results';
 import Business from './components/Business';
 import ChatSidebar from './components/ChatSidebar';
+import Friends from './components/Friends';
 
 interface user {
   sidebarStatus: boolean,
@@ -56,6 +57,7 @@ function App() {
             <Route path="/" element={<Home setError={setError} />}/>
             <Route path='/results/:search' element={<Results />} />
             <Route path='/results/:search/:id' element={<Business />} />
+            <Route path='/friends' element={<Friends />} />
           </Routes>
         </BrowserRouter>
       </LocationContext.Provider>
