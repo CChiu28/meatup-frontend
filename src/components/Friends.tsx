@@ -29,8 +29,14 @@ export default function Friends() {
         <div className='container mx-auto'>
             {friends.map((friend,index) => {
                 return(
-                    <div key={index}>
-                        {friend.uid}
+                    <div key={index} className="card lg:card-side shadow-lg">
+                        <figure>
+                            <img src={friend.photoUrl} />
+                        </figure>
+                        <div className='card-body'>
+                            <h2 className='card-title'>{friend.displayName}</h2>
+                            <p>{friend.email}</p>
+                        </div>
                     </div>
                 )
             })}

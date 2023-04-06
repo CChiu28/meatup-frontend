@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { SidebarContext } from "../App";
 import ChatWidget from "./ChatWidget";
+import FriendsChat from "./FriendsChat";
 
 interface props {
     showSidebar: boolean,
@@ -10,10 +11,15 @@ interface props {
 export default function ChatSidebar({showSidebar,closeSidebar}: props) {
     // const [businessIdsetShowSidebar] = useState(false);
     const [show,setShow] = useState<string|null>(null);
+    const [friendChat, setFriendChat] = useState<string>('');
     const context = useContext(SidebarContext);
 
     function setClose() {
 
+    }
+
+    function getFriendChat(id: string) {
+        setFriendChat(id);
     }
 
     return(
@@ -26,6 +32,7 @@ export default function ChatSidebar({showSidebar,closeSidebar}: props) {
                 <h3 className="mt-3 text-4xl font-semibold text-white">
                     {context.businessName}
                 </h3>
+                <FriendsChat getFriendChat={getFriendChat}/>
                 <ChatWidget business={context.businessId} userName={context.user} />
             </div>
         </div>
